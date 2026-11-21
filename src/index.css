@@ -1,22 +1,69 @@
 @tailwind base;@tailwind components;@tailwind utilities;
-html{scroll-behavior:smooth}
-body{background:#0a0710;color:#efe8f7;font-family:Manrope,sans-serif;overflow-x:hidden}
+:root{--ink:#0a0c0f;--gold:#d6b46a;--gold-hi:#f0d9a0;--ivory:#f4ede0;--rose:#d98a7a;--safe-b:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+body{background:var(--ink);color:var(--ivory);font-family:Manrope,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+select,input,textarea{min-width:0;max-width:100%}
+.grid>*,.flex>*{min-width:0}
+select{color-scheme:dark}
+select option,select optgroup{background-color:#12161b;color:#f4ede0}
+::selection{background:rgba(214,180,106,.35)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:rgba(214,180,106,.3);border-radius:8px}
+.no-scrollbar{scrollbar-width:none}.no-scrollbar::-webkit-scrollbar{display:none}
 @layer components{
-.glass{@apply bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl}
-.gold-text{background:linear-gradient(100deg,#f3dca6 0%,#d4a95a 35%,#e0a38f 60%,#f3dca6 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite}
-.btn{@apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-300 active:scale-95}
-.btn-gold{@apply text-ink;background:linear-gradient(120deg,#f3dca6,#d4a95a 55%,#e0a38f);box-shadow:0 8px 30px -8px rgba(212,169,90,.6)}
-.btn-gold:hover{filter:brightness(1.08);transform:translateY(-2px)}
-.btn-ghost{@apply border border-white/15 text-white/90 hover:bg-white/10}
-.field{@apply w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm outline-none focus:border-gold-400/70 focus:bg-white/[0.07] transition placeholder:text-white/30}
-.lbl{@apply text-xs text-white/50 mb-1.5 block}
+.glass{position:relative;@apply bg-white/[0.035] backdrop-blur-xl border border-white/10 rounded-2xl}
+.glass::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(280px circle at var(--x,50%) var(--y,-30%),rgba(214,180,106,.16),transparent 65%)}
+.glass:hover::before{opacity:1}
+.gold-text{background:linear-gradient(100deg,#f0d9a0 0%,#d6b46a 35%,#d98a7a 60%,#f0d9a0 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 8s linear infinite}
+.btn{position:relative;overflow:hidden;min-height:44px;@apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-300 active:scale-95}
+.btn-gold{color:var(--ink);background:linear-gradient(120deg,#f0d9a0,#d6b46a 55%,#d98a7a);box-shadow:0 10px 30px -10px rgba(214,180,106,.65)}
+.btn-gold::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);transition:transform .7s}
+.btn-gold:hover::after{transform:translateX(120%)}
+.btn-gold:disabled{opacity:.5}
+.btn-ghost{@apply border border-white/15 text-white/90 hover:bg-white/10 hover:border-gold-400/40}
+.field{min-height:44px;@apply w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm outline-none focus:border-gold-400/70 focus:bg-white/[0.07] transition placeholder:text-white/30}
+.lbl{@apply text-xs text-white/55 mb-1.5 block}
+.chip{min-height:40px;@apply shrink-0 rounded-full px-4 text-sm border border-white/[0.12] text-white/70 transition active:scale-95}
+.chip.on{background:linear-gradient(120deg,#f0d9a0,#d6b46a);color:var(--ink);border-color:transparent;font-weight:600}
+.nav-link{position:relative;@apply px-3 py-2 text-sm text-white/70 hover:text-white transition}
+.nav-link::after{content:'';position:absolute;left:12px;right:12px;bottom:2px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.nav-link:hover::after,.nav-link.active::after{transform:scaleX(1)}
+.nav-link.active{color:var(--gold-hi)}
+.shimmer{background:linear-gradient(110deg,rgba(255,255,255,.04) 30%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.04) 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.range{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent;cursor:pointer}
+.range::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--gold) var(--p,50%),rgba(255,255,255,.14) var(--p,50%))}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:var(--ivory);border:4px solid var(--gold);box-shadow:0 0 0 7px rgba(214,180,106,.16)}
+.range::-moz-range-track{height:4px;border-radius:4px;background:rgba(255,255,255,.14)}
+.range::-moz-range-progress{height:4px;border-radius:4px;background:var(--gold)}
+.range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--ivory);border:4px solid var(--gold)}
 }
+@media (max-width:640px){.field{font-size:16px}}
 @keyframes shine{to{background-position:200% center}}
-@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-50px) scale(1.15)}}
-@keyframes twinkle{0%,100%{opacity:.1;transform:scale(.6)}50%{opacity:.9;transform:scale(1)}}
+@keyframes shimmer{to{background-position:-200% 0}}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes wordUp{from{transform:translateY(110%)}to{transform:none}}
 @keyframes spinSlow{to{transform:rotate(360deg)}}
-.reveal{opacity:0;transform:translateY(22px);transition:all .8s cubic-bezier(.2,.7,.2,1)}
+@keyframes marq{to{transform:translateX(-50%)}}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1)}}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes sweep{from{transform:scaleX(0);transform-origin:left;opacity:1}60%{transform:scaleX(1);transform-origin:left;opacity:1}to{transform:scaleX(1);transform-origin:right;opacity:0}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes introOut{to{opacity:0;visibility:hidden}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page{animation:pageIn .6s cubic-bezier(.2,.7,.2,1) both}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+.tilt{transition:transform .3s ease-out;will-change:transform}
+.marq{animation:marq 32s linear infinite}.marq:hover{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
 @media print{body *{visibility:hidden}.invoice,.invoice *{visibility:visible}.invoice{position:absolute;left:0;top:0;width:100%;box-shadow:none!important}}
+
+@keyframes burst{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.2)}}
+@keyframes ripple{from{opacity:.5;transform:scale(0)}to{opacity:0;transform:scale(1)}}
+@keyframes aurora1{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(12vw,8vh,0)}}
+@keyframes aurora2{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-14vw,-6vh,0)}}
+.ripple{position:absolute;border-radius:9999px;background:rgba(255,255,255,.45);pointer-events:none;animation:ripple .65s ease-out forwards}
+.btn{transition:translate .25s ease-out,transform .3s,filter .3s,background .3s,border-color .3s}
+.outline-text{-webkit-text-stroke:1px rgba(214,180,106,.55);color:transparent}
+.marq-slow{animation:marq 40s linear infinite}
